@@ -1,0 +1,37 @@
+{
+   "packages":[
+      {
+         "name": "AlgoBot",
+         "maintainer": "ofer zvik",		  
+         "websiteURL": " http://www.algobrix.co",
+         "email": "ofer@gmail.com",
+		 "help": {
+        	"online": ""
+	   },
+     	"platforms":
+		[
+			 {
+	           "name": "AlgoBot",
+	           "architecture": "avr",
+	           "version": "0.1.0",
+	           "category": "AlgoBot",
+	           "url": "https://github.com/oferzv/arduino_algobot_board/blob/master/aglobot_pack_0.1.zip",
+			   "checksum": "SHA-256:b1092f789dd0d332fafaa0a8825236c9cb1cfa1e8495f7907f5f298e2c643cca",
+	           "archiveFileName": "aglobot_pack_0.1.zip",
+	           "size": "101006", 
+	           "boards":
+				[
+	              { "name": "AlgoBot_328PB" }
+				
+	           	],
+	           "toolsDependencies":
+				[				
+				]
+	        }
+	     ],      	
+		 "tools":
+		  [		
+		  ]
+		}
+	]  
+}
