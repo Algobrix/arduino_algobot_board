@@ -10,7 +10,7 @@ Arduino IDE 1.6.9 or higher which contains avr-gcc in Version 4.9.2
 ### Install
 Copy this link into your Arduino IDE.
 
-**https://raw.githubusercontent.com/amoehl/uino-atmega328pb/master/package_atmega328pb_index.json**
+**https://raw.githubusercontent.com/oferzv/arduino_algobot_board/master/package_Algobot_index.json**
 
 Run "Bord Manager" -> Contributed -> AlgoBot -> _Install_
 
