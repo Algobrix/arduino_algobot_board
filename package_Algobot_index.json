@@ -15,9 +15,9 @@
 	           "architecture": "avr",
 	           "version": "0.1.0",
 	           "category": "AlgoBot",
-	           "url": "https://github.com/oferzv/arduino_algobot_board/raw/master/aglobot_pack_0.1.zip",
+	           "url": "https://github.com/oferzv/arduino_algobot_board/raw/master/algobot_pack_0.1.zip",
 			   "checksum": "SHA-256:B1092F789DD0D332FAFAA0A8825236C9CB1CFA1E8495F7907F5F298E2C643CCA",
-	           "archiveFileName": "aglobot_pack_0.1.zip",
+	           "archiveFileName": "algobot_pack_0.1.zip",
 	           "size": "103351", 
 	           "boards":
 				[
