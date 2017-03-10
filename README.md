@@ -1,11 +1,8 @@
-# Arduino Atmega328PB Package
-## Support for the new Atmel Chip
+# Arduino AlgoBot Package
+## Support for the AlgoBot board
 
 
-This is the worldwide first real Atmega328PB support package for Arduino! No hooks.
-Look at my uino-hardware Repo for Schematic of my Boards.
-This package lets you compile your code for the Atmel Atmega328PB Microcontroller. There is no additionally compiler needed. You can compile out of the box.
-
+This package lets you compile your code for the AlgoBot board. 
 
 ### Requirements 
 Arduino IDE 1.6.9 or higher which contains avr-gcc in Version 4.9.2
@@ -15,11 +12,11 @@ Copy this link into your Arduino IDE.
 
 **https://raw.githubusercontent.com/amoehl/uino-atmega328pb/master/package_atmega328pb_index.json**
 
-Run "Bord Manager" -> Contributed -> Atmega328PB -> _Install_
+Run "Bord Manager" -> Contributed -> AlgoBot -> _Install_
 
 ### Hardware
 
-This Package currently supports only my own developed boards. 
-More Information: https://github.com/amoehl/uino-hardware
+This Package supports only AlgoBot boards. 
+More Information: http://www.algobrix.co/
 
 
