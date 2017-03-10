@@ -16,7 +16,8 @@ Run "Bord Manager" -> Contributed -> AlgoBot -> _Install_
 
 ### Hardware
 
-This Package supports only AlgoBot boards. 
-More Information: http://www.algobrix.co/
+This Package supports only AlgoBot boards.
+
+More Information: http://www.algobrix.co
 
 
