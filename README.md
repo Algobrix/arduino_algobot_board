@@ -14,7 +14,7 @@ To add board support for our products, go to File > Preferences, and paste this 
  
 This field can be found in 'Preferences...' under the Arduino File menu.
 
-Run "Bord Manager" -> Contributed -> AlgoBot -> _Install_
+Now, under the **Tools** > **Board** > **Boards Manager...**, if you type in "algobot", you will see an option to install board files for algobot Arduino compatible boards. Click "Install" to add these to your list.
 
 ### Hardware
 
