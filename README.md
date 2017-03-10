@@ -8,7 +8,7 @@ This package lets you compile your code for the AlgoBot board.
 Arduino IDE 1.6.9 or higher which contains avr-gcc in Version 4.9.2
 
 ### Install
-Copy this link into your Arduino IDE.
+To add board support for our products, go to File > Preferences, and paste this URL into the 'Additional Boards Manager URLs' input field:
 
 **https://raw.githubusercontent.com/oferzv/arduino_algobot_board/master/package_Algobot_index.json**
 
