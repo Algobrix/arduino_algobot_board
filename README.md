@@ -10,7 +10,9 @@ Arduino IDE 1.6.9 or higher which contains avr-gcc in Version 4.9.2
 ### Install
 To add board support for our products, go to File > Preferences, and paste this URL into the 'Additional Boards Manager URLs' input field:
 
-**https://raw.githubusercontent.com/oferzv/arduino_algobot_board/master/package_Algobot_index.json**
+ https://raw.githubusercontent.com/oferzv/arduino_algobot_board/master/package_Algobot_index.json
+ 
+This field can be found in 'Preferences...' under the Arduino File menu.
 
 Run "Bord Manager" -> Contributed -> AlgoBot -> _Install_
 
