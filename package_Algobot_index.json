@@ -4,7 +4,7 @@
          "name": "AlgoBot",
          "maintainer": "Algobrix",		  
          "websiteURL": "http://www.algobrix.com",
-         "email": "",
+         "email": "ofer@algobrix.com",
 		 "help": {
         	"online": "https://github.com/Algobrix/arduino_algobot_board"
 	   },
