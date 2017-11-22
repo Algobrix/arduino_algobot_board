@@ -3,12 +3,11 @@
       {
          "name": "AlgoBot",
          "maintainer": "Algobrix",		  
-         "websiteURL": " http://www.algobrix.co",
-         "email": "ofer@gmail.com",
-		 "help": {
-        	"online": "http://www.algobrix.com"
-	   },
-     	"platforms":
+         "websiteURL": " http://www.algobrix.com",
+         "email": "ofer@algobtix.com",
+		 "help": {"online": "http://www.algobrix.com" },
+	      
+         "platforms":
 		[
 			 {
 	           "name": "AlgoBot",
