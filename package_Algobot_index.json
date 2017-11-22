@@ -7,9 +7,8 @@
          "email": "ofer@algobtix.com",
 		 "help": {"online": "http://www.algobrix.com" },
 	      
-         "platforms":
-		[
-			 {
+         "platforms": [
+		{
 	           "name": "AlgoBot",
 	           "architecture": "avr",
 	           "version": "0.1.0",
