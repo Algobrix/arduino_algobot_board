@@ -11,7 +11,7 @@
      	"platforms":
 		[
 			 {
-	           "name": "Algobrix Boards",
+	           "name": "AlgoBrix Boards",
 	           "architecture": "avr",
 	           "version": "0.1.0",
 	           "category": "contributed",
