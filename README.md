@@ -2,7 +2,7 @@
 ## Support for the AlgoBot board
 
 
-This package lets you compile your code for the AlgoBot board. 
+This package contains support for the AlgoBot Arduino-compatible board. 
 
 
 ### Install
