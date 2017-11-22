@@ -15,7 +15,7 @@
 	           "architecture": "avr",
 	           "version": "0.1.0",
 	           "category": "contributed",
-	           "url": "https://github.com/amoehl/uino-atmega328pb/raw/master/uino_m328pb_pack_1.0.0.zip",
+	           "url": " https://github.com/Algobrix/arduino_algobot_board/raw/master/algobot_pack_0.1.zip",
 			   "checksum": "SHA-256:E5A7CC95450CC4509139440C567EC31D4DDC59B43AB409A4B43CC980B8A053A4",
 	           "archiveFileName": "algobot_pack_0.1.zip",
 	           "size": "103351", 
