@@ -37,7 +37,7 @@ compiler.size.cmd=avr-size
 
 # This can be overridden in boards.txt
 #include the iom328pb.h via redefining  D__AVR_DEV_LIB_NAME__, cause io.h doesn't know about atmega328pb
-build.extra_flags= "-I{runtime.platform.path}/tools/include" -D__AVR_DEV_LIB_NAME__=m328pb
+build.extra_flags= "-I{runtime.platform.path}/tools/include" -D__AVR_DEV_LIB_NAME__= m328pb
 
 # These can be overridden in platform.local.txt
 compiler.c.extra_flags=
@@ -131,5 +131,5 @@ tools.avrdude_remote.upload.pattern=/usr/bin/run-avrdude /tmp/sketch.hex {upload
 # USB Default Flags
 # Default blank usb manufacturer will be filled in at compile time
 # - from numeric vendor ID, set to Unknown otherwise
-#build.usb_manufacturer="AlgoBrix"
+#build.usb_manufacturer=""
 build.usb_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid} '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
