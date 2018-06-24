@@ -49,7 +49,7 @@ PROGRAM    = optiboot
 # Arduino user IDE setup, or the Arduino source tree.
 # Uncomment this next lines to build within the arduino environment,
 # using the arduino-included avrgcc toolset (mac and pc)
- ENV ?= arduino
+# ENV ?= arduino
 # ENV ?= arduinodev
 # OS ?= macosx
 # OS ?= windows
@@ -83,7 +83,7 @@ else
 # Arduino 1.0 (and earlier) tool location
   TOOLROOT = ../../../tools
 endif
-GCCROOT = $(TOOLROOT)/avr2/bin/
+GCCROOT = $(TOOLROOT)/avr/bin/
 
 ifeq ($(OS), windows)
 # On windows, SOME of the tool paths will need to have backslashes instead
@@ -151,16 +151,16 @@ SIZE           = $(GCCROOT)avr-size
 # appropriate parameters ("-DLED_START_FLASHES=10") to gcc
 #
 
-#BAUD_RATE = 115200
-
 ifdef BAUD_RATE
 BAUD_RATE_CMD = -DBAUD_RATE=$(BAUD_RATE)
+dummy = FORCE
 else
-BAUD_RATE_CMD = -DBAUD_RATE=57600
+BAUD_RATE_CMD = -DBAUD_RATE=115200
 endif
 
 ifdef LED_START_FLASHES
 LED_START_FLASHES_CMD = -DLED_START_FLASHES=$(LED_START_FLASHES)
+dummy = FORCE
 else
 LED_START_FLASHES_CMD = -DLED_START_FLASHES=3
 endif
@@ -168,18 +168,22 @@ endif
 # BIG_BOOT: Include extra features, up to 1K.
 ifdef BIGBOOT
 BIGBOOT_CMD = -DBIGBOOT=1
+dummy = FORCE
 endif
 
 ifdef SOFT_UART
 SOFT_UART_CMD = -DSOFT_UART=1
+dummy = FORCE
 endif
 
 ifdef LED_DATA_FLASH
 LED_DATA_FLASH_CMD = -DLED_DATA_FLASH=1
+dummy = FORCE
 endif
 
 ifdef LED
 LED_CMD = -DLED=$(LED)
+dummy = FORCE
 endif
 
 ifdef SINGLESPEED
@@ -230,45 +234,297 @@ endif
 #---------------------------------------------------------------------------
 #
 
-atmega328pb_20MHz: TARGET = atmega328pb
-atmega328pb_20MHz: MCU_TARGET = atmega328pb
-atmega328pb_20MHz: CFLAGS += $(COMMON_OPTIONS)
-atmega328pb_20MHz: AVR_FREQ ?= 20000000L
-atmega328pb_20MHz: LDSECTIONS  = -Wl,--section-start=.text=0x7e00 -Wl,--section-start=.version=0x7ffe
-atmega328pb_20MHz: $(PROGRAM)_atmega328pb_20MHz.hex
-atmega328pb_20MHz: $(PROGRAM)_atmega328pb_20MHz.lst
+# Test platforms
+# Virtual boot block test
+virboot8: TARGET = atmega8
+virboot8: MCU_TARGET = atmega8
+virboot8: CFLAGS += $(COMMON_OPTIONS) '-DVIRTUAL_BOOT_PARTITION' '-Dsave_vect_num=EE_RDY_vect_num'
+virboot8: AVR_FREQ ?= 16000000L 
+virboot8: LDSECTIONS  = -Wl,--section-start=.text=0x1c00 -Wl,--section-start=.version=0x1ffe
+virboot8: $(PROGRAM)_virboot8.hex
+virboot8: $(PROGRAM)_virboot8.lst
 
-atmega328pb_20MHz_isp: atmega328_20MHz
-atmega328pb_20MHz_isp: TARGET = atmega328pb
-atmega328pb_20MHz_isp: MCU_TARGET = atmega328pb
-# 512 byte boot, SPIEN
-atmega328pb_20MHz_isp: HFUSE ?= DE
+
+virboot328: TARGET = atmega328
+virboot328: MCU_TARGET = atmega328p
+virboot328: CFLAGS += $(COMMON_OPTIONS) '-DVIRTUAL_BOOT_PARTITION'
+virboot328: AVR_FREQ ?= 16000000L
+virboot328: LDSECTIONS  = -Wl,--section-start=.text=0x7d80 -Wl,--section-start=.version=0x7ffe
+virboot328: $(PROGRAM)_virboot328.hex
+virboot328: $(PROGRAM)_virboot328.lst
+
+virboot328_isp: virboot328
+virboot328_isp: TARGET = virboot328
+virboot328_isp: MCU_TARGET = atmega328p
+# no boot section, SPIEN
+virboot328_isp: HFUSE ?= DF
 # Low power xtal (16MHz) 16KCK/14CK+65ms
-atmega328pb_20MHz_isp: LFUSE ?= FF
+virboot328_isp: LFUSE ?= FF
 # 2.7V brownout
-atmega328pb_20MHz_isp: EFUSE ?= 05
-atmega328pb_20MHz_isp: isp
+virboot328_isp: EFUSE ?= 05
+virboot328_isp: isp
 
 
+# Diecimila, Duemilanove with m168, and NG use identical bootloaders
+# Call it "atmega168" for generality and clarity, keep "diecimila" for
+# backward compatibility of makefile
+#
+atmega168: TARGET = atmega168
+atmega168: MCU_TARGET = atmega168
+atmega168: CFLAGS += $(COMMON_OPTIONS)
+atmega168: AVR_FREQ ?= 16000000L 
+atmega168: $(PROGRAM)_atmega168.hex
+atmega168: $(PROGRAM)_atmega168.lst
 
-atmega328pb_16MHz: TARGET = atmega328pb
-atmega328pb_16MHz: MCU_TARGET = atmega328pb
-atmega328pb_16MHz: CFLAGS += $(COMMON_OPTIONS)
-atmega328pb_16MHz: AVR_FREQ ?= 16000000L
-atmega328pb_16MHz: LDSECTIONS  = -Wl,--section-start=.text=0x7e00 -Wl,--section-start=.version=0x7ffe
-atmega328pb_16MHz: $(PROGRAM)_atmega328pb_16MHz.hex
-atmega328pb_16MHz: $(PROGRAM)_atmega328pb_16MHz.lst
+atmega168_isp: atmega168
+atmega168_isp: TARGET = atmega168
+# 2.7V brownout
+atmega168_isp: HFUSE ?= DD
+# Full swing (16MHz) 16KCK/14CK+65ms
+atmega168_isp: LFUSE ?= F7
+# 512 byte boot
+atmega168_isp: EFUSE ?= 04
+atmega168_isp: isp
 
-atmega328pb_16MHz_isp: atmega328_16MHz_isp
-atmega328pb_16MHz_isp: TARGET = atmega328pb
-atmega328pb_16MHz_isp: MCU_TARGET = atmega328pb
+atmega16: TARGET = atmega16
+atmega16: MCU_TARGET = atmega16
+atmega16: CFLAGS += $(COMMON_OPTIONS)
+atmega16: AVR_FREQ ?= 16000000L 
+atmega16: $(PROGRAM)_atmega16.hex
+atmega16: $(PROGRAM)_atmega16.lst
+
+atmega328: TARGET = atmega328
+atmega328: MCU_TARGET = atmega328p
+atmega328: CFLAGS += $(COMMON_OPTIONS)
+atmega328: AVR_FREQ ?= 16000000L
+atmega328: LDSECTIONS  = -Wl,--section-start=.text=0x7e00 -Wl,--section-start=.version=0x7ffe
+atmega328: $(PROGRAM)_atmega328.hex
+atmega328: $(PROGRAM)_atmega328.lst
+
+atmega328_isp: atmega328
+atmega328_isp: TARGET = atmega328
+atmega328_isp: MCU_TARGET = atmega328p
 # 512 byte boot, SPIEN
-atmega328pb_16MHz_isp: HFUSE ?= DE
+atmega328_isp: HFUSE ?= DE
 # Low power xtal (16MHz) 16KCK/14CK+65ms
-atmega328pb_16MHz_isp: LFUSE ?= FF
+atmega328_isp: LFUSE ?= FF
 # 2.7V brownout
-atmega328pb_16MHz_isp: EFUSE ?= 05
-atmega328pb_16MHz_isp: isp
+atmega328_isp: EFUSE ?= 05
+atmega328_isp: isp
+
+atmega328pb: TARGET = atmega328
+atmega328pb: MCU_TARGET = atmega328pb
+atmega328pb: CFLAGS += $(COMMON_OPTIONS) '-DTIMEOUT_MS=500' '-DLED_DATA_FLASH=1' '-DLED=B0' 
+atmega328pb: AVR_FREQ ?= 16000000L
+atmega328pb: LDSECTIONS  = -Wl,--section-start=.text=0x7e00 -Wl,--section-start=.version=0x7ffe
+atmega328pb: $(PROGRAM)_atmega328pb.hex
+atmega328pb: $(PROGRAM)_atmega328pb.lst
+
+atmega328pb_isp: atmega328
+atmega328pb_isp: TARGET = atmega328pb
+atmega328pb_isp: MCU_TARGET = atmega328p
+# 512 byte boot, SPIEN
+atmega328pb_isp: HFUSE ?= DE
+# Low power xtal (16MHz) 16KCK/14CK+65ms
+atmega328pb_isp: LFUSE ?= FF
+# 2.7V brownout
+atmega328pb_isp: EFUSE ?= 05
+atmega328pb_isp: isp
+
+#Atmega1280
+atmega1280: MCU_TARGET = atmega1280
+atmega1280: CFLAGS += $(COMMON_OPTIONS) -DBIGBOOT $(UART_CMD)
+atmega1280: AVR_FREQ ?= 16000000L
+atmega1280: LDSECTIONS  = -Wl,--section-start=.text=0x1fc00  -Wl,--section-start=.version=0x1fffe
+atmega1280: $(PROGRAM)_atmega1280.hex
+atmega1280: $(PROGRAM)_atmega1280.lst
+
+
+# ATmega8
+#
+atmega8: TARGET = atmega8
+atmega8: MCU_TARGET = atmega8
+atmega8: CFLAGS += $(COMMON_OPTIONS)
+atmega8: AVR_FREQ ?= 16000000L 
+atmega8: LDSECTIONS  = -Wl,--section-start=.text=0x1e00 -Wl,--section-start=.version=0x1ffe -Wl,--gc-sections -Wl,--undefined=optiboot_version
+atmega8: $(PROGRAM)_atmega8.hex
+atmega8: $(PROGRAM)_atmega8.lst
+
+atmega8_isp: atmega8
+atmega8_isp: TARGET = atmega8
+atmega8_isp: MCU_TARGET = atmega8
+# SPIEN, CKOPT (for full swing xtal), Bootsize=512B
+atmega8_isp: HFUSE ?= CC
+# 2.7V brownout, 16MHz Xtal, 16KCK/14CK+65ms
+atmega8_isp: LFUSE ?= BF
+atmega8_isp: isp
+
+
+#---------------------------------------------------------------------------
+# "Board-level Platform" targets.
+# A "Board-level Platform" implies a manufactured platform with a particular
+# AVR_FREQ, LED, and so on.  Parameters are not particularly changable from
+# the "make" command line.
+# Most of the board-level platform builds should envoke make recursively
+#  appropriate specific options
+#---------------------------------------------------------------------------
+# 20MHz clocked platforms
+#
+# These are capable of 230400 baud, or 115200 baud on PC (Arduino Avrdude issue)
+#
+
+pro20: TARGET = pro_20mhz
+pro20: CHIP = atmega168
+pro20:
+	$(MAKE) atmega168 AVR_FREQ=20000000L LED_START_FLASHES=3
+	mv $(PROGRAM)_$(CHIP).hex $(PROGRAM)_$(TARGET).hex
+	mv $(PROGRAM)_$(CHIP).lst $(PROGRAM)_$(TARGET).lst
+
+pro20_isp: pro20
+pro20_isp: TARGET = pro_20mhz
+# 4.3V brownout (for max speed!)
+pro20_isp: HFUSE ?= DC
+# Full swing xtal (20MHz) 258CK/14CK+4.1ms
+pro20_isp: LFUSE ?= F7
+# 512 byte boot
+pro20_isp: EFUSE ?= 04
+pro20_isp: isp
+
+# 16MHz clocked platforms
+#
+# These are capable of 230400 baud, or 115200 baud on PC (Arduino Avrdude issue)
+#
+
+pro16: TARGET = pro_16MHz
+pro16: CHIP = atmega168
+pro16:
+	$(MAKE) $(CHIP) AVR_FREQ=16000000L LED_START_FLASHES=3
+	mv $(PROGRAM)_$(CHIP).hex $(PROGRAM)_$(TARGET).hex
+	mv $(PROGRAM)_$(CHIP).lst $(PROGRAM)_$(TARGET).lst
+
+pro16_isp: pro16
+pro16_isp: TARGET = pro_16MHz
+# 2.7V brownout
+pro16_isp: HFUSE ?= DD
+# Full swing xtal (20MHz) 258CK/14CK+4.1ms
+pro16_isp: LFUSE ?= F7
+# 512 byte boot
+pro16_isp: EFUSE ?= 04
+pro16_isp: isp
+
+diecimila: TARGET = diecimila
+diecimila: CHIP = atmega168
+diecimila:
+	$(MAKE) $(CHIP) AVR_FREQ=16000000L LED_START_FLASHES=3
+	mv $(PROGRAM)_$(CHIP).hex $(PROGRAM)_$(TARGET).hex
+	mv $(PROGRAM)_$(CHIP).lst $(PROGRAM)_$(TARGET).lst
+
+diecimila_isp: diecimila
+diecimila_isp: TARGET = diecimila
+# 2.7V brownout
+diecimila_isp: HFUSE ?= DD
+# Low power xtal (16MHz) 16KCK/14CK+65ms
+diecimila_isp: LFUSE ?= F7
+# 512 byte boot
+diecimila_isp: EFUSE ?= 04
+diecimila_isp: isp
+
+# MEGA1280 Board (this is different from the atmega1280 chip platform)
+# Mega has a minimum boot size of 1024 bytes, so enable extra functions
+# Note that optiboot does not (can not) work on the MEGA2560
+#mega: TARGET = atmega1280
+mega1280: atmega1280
+
+mega1280_isp: mega1280
+mega1280_isp: TARGET = atmega1280
+mega1280_isp: MCU_TARGET = atmega1280
+# 1024 byte boot
+mega1280_isp: HFUSE ?= DE
+# Low power xtal (16MHz) 16KCK/14CK+65ms
+mega1280_isp: LFUSE ?= FF
+# 2.7V brownout; wants F5 for some reason...
+mega1280_isp: EFUSE ?= F5
+mega1280_isp: isp
+
+# 8MHz clocked platforms
+#
+# These are capable of 115200 baud
+# Note that "new" Arduinos with an AVR as USB/Serial converter will NOT work
+# with an 8MHz target Arduino.  The bitrate errors are in opposite directions,
+# and total too large a number.
+#
+
+lilypad: TARGET = $@
+lilypad: CHIP = atmega168
+lilypad:
+	$(MAKE) $(CHIP) AVR_FREQ=8000000L LED_START_FLASHES=3
+	mv $(PROGRAM)_$(CHIP).hex $(PROGRAM)_$(TARGET).hex
+	mv $(PROGRAM)_$(CHIP).lst $(PROGRAM)_$(TARGET).lst
+
+lilypad_isp: lilypad
+lilypad_isp: TARGET = lilypad
+# 2.7V brownout
+lilypad_isp: HFUSE ?= DD
+# Internal 8MHz osc (8MHz) Slow rising power
+lilypad_isp: LFUSE ?= E2
+# 512 byte boot
+lilypad_isp: EFUSE ?= 04
+lilypad_isp: isp
+
+# lilypad_resonator is the same as a 8MHz lilypad, except for fuses.
+lilypad_resonator: lilypad
+
+lilypad_resonator_isp: lilypad
+lilypad_resonator_isp: TARGET = lilypad
+# 2.7V brownout
+lilypad_resonator_isp: HFUSE ?= DD
+# Full swing xtal (20MHz) 258CK/14CK+4.1ms
+lilypad_resonator_isp: LFUSE ?= C6
+# 512 byte boot
+lilypad_resonator_isp: EFUSE ?= 04
+lilypad_resonator_isp: isp
+
+pro8: TARGET = pro_8MHz
+pro8: CHIP = atmega168
+pro8:
+	$(MAKE) $(CHIP) AVR_FREQ=8000000L LED_START_FLASHES=3
+	mv $(PROGRAM)_$(CHIP).hex $(PROGRAM)_$(TARGET).hex
+	mv $(PROGRAM)_$(CHIP).lst $(PROGRAM)_$(TARGET).lst
+
+pro8_isp: pro8
+pro8_isp: TARGET = pro_8MHz
+# 2.7V brownout
+pro8_isp: HFUSE ?= DD
+# Full swing xtal (20MHz) 258CK/14CK+4.1ms
+pro8_isp: LFUSE ?= C6
+# 512 byte boot
+pro8_isp: EFUSE ?= 04
+pro8_isp: isp
+
+atmega328_pro8: TARGET = atmega328_pro_8MHz
+atmega328_pro8: CHIP = atmega328
+atmega328_pro8:
+	$(MAKE) $(CHIP) AVR_FREQ=8000000L LED_START_FLASHES=3
+	mv $(PROGRAM)_$(CHIP).hex $(PROGRAM)_$(TARGET).hex
+	mv $(PROGRAM)_$(CHIP).lst $(PROGRAM)_$(TARGET).lst
+
+atmega328_pro8_isp: atmega328_pro8
+atmega328_pro8_isp: TARGET = atmega328_pro_8MHz
+atmega328_pro8_isp: MCU_TARGET = atmega328p
+# 512 byte boot, SPIEN
+atmega328_pro8_isp: HFUSE ?= DE
+# Low power xtal (16MHz) 16KCK/14CK+65ms
+atmega328_pro8_isp: LFUSE ?= FF
+# 2.7V brownout
+atmega328_pro8_isp: EFUSE ?= 05
+atmega328_pro8_isp: isp
+
+#
+# Include additional platforms
+include Makefile.atmel
+include Makefile.extras
+include Makefile.1284
+include Makefile.custom
 
 
 #---------------------------------------------------------------------------
@@ -276,7 +532,12 @@ atmega328pb_16MHz_isp: isp
 # Generic build instructions
 #
 
+FORCE:
 
+baudcheck: FORCE
+	- @$(CC) --version
+	- @$(CC) $(CFLAGS) -E baudcheck.c -o baudcheck.tmp.sh
+	- @$(SH) baudcheck.tmp.sh
 
 isp: $(TARGET)
 	$(MAKE) -f Makefile.isp isp TARGET=$(TARGET)
@@ -285,7 +546,7 @@ isp-stk500: $(PROGRAM)_$(TARGET).hex
 	$(STK500-1)
 	$(STK500-2)
 
-%.elf: $(OBJ) $(dummy)
+%.elf: $(OBJ) baudcheck $(dummy)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< $(LIBS)
 	$(SIZE) $@
 
