@@ -10,6 +10,23 @@
 	   },
      	"platforms":
 		[
+			{
+	           "name": "AlgoBrix Boards",
+	           "architecture": "avr",
+	           "version": "0.1.4",
+	           "category": "contributed",
+	           "url": "http://raw.githubusercontent.com/Algobrix/arduino_algobot_board/master/algobot_pack_0.1.4.zip",
+			   "checksum": "SHA-256:98ae4e94e7e49c7a470567b44a8c8fa2ebdb08df4f258b6674aec9aa2bc58d0c",
+	           "archiveFileName": "algobot_pack_0.1.4.zip",
+	           "size": "154577", 
+	           "boards":
+				[
+	              { "name": "AlgoBot_328PB" }
+				],
+	           "toolsDependencies":
+				[				
+				]
+				},
 			 {
 	           "name": "AlgoBrix Boards",
 	           "architecture": "avr",
