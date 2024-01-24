@@ -2,11 +2,11 @@
    "packages":[
       {
          "name": "AlgoBot",
-         "maintainer": "Algobrix",		  
-         "websiteURL": "http://www.algobrix.com",
-         "email": "ofer@algobrix.com",
+         "maintainer": "YoungEngineers",		  
+         "websiteURL": "https://www.youngengineers.org/",
+         "email": "semir.tursunovic@microbitdesign.com",
 		 "help": {
-        	"online": "https://github.com/Algobrix/arduino_algobot_board"
+        	"online": "https://www.youngengineers.org/"
 	   },
      	"platforms":
 		[
