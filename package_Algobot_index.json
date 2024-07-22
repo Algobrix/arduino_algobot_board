@@ -28,7 +28,7 @@
 				]
 			},
 			{
-	           "name": "AlgoBrix Boards",
+	           "name": "Tangible and GoAlgo",
 	           "architecture": "avr",
 	           "version": "0.2.2",
 	           "category": "contributed",
@@ -45,7 +45,7 @@
 				]
 			},
 			{
-	           "name": "AlgoBrix Boards",
+	           "name": "Tangible and GoAlgo",
 	           "architecture": "avr",
 	           "version": "0.2.1",
 	           "category": "contributed",
@@ -62,7 +62,7 @@
 				]
 			},
 			{
-	           "name": "AlgoBrix Boards",
+	           "name": "Tangible and GoAlgo",
 	           "architecture": "avr",
 	           "version": "0.2.0",
 	           "category": "contributed",
@@ -79,7 +79,7 @@
 				]
 			},
 			{
-	           "name": "AlgoBrix Boards",
+	           "name": "Tangible and GoAlgo",
 	           "architecture": "avr",
 	           "version": "0.1.9",
 	           "category": "contributed",
@@ -96,7 +96,7 @@
 				]
 			},
 			{
-	           "name": "AlgoBrix Boards",
+	           "name": "Tangible and GoAlgo",
 	           "architecture": "avr",
 	           "version": "0.1.8",
 	           "category": "contributed",
@@ -113,7 +113,7 @@
 				]
 			},
 			{
-	           "name": "AlgoBrix Boards",
+	           "name": "Tangible and GoAlgo",
 	           "architecture": "avr",
 	           "version": "0.1.7",
 	           "category": "contributed",
@@ -130,7 +130,7 @@
 				]
 			},
 			{
-	           "name": "AlgoBrix Boards",
+	           "name": "Tangible and GoAlgo",
 	           "architecture": "avr",
 	           "version": "0.1.6",
 	           "category": "contributed",
@@ -147,7 +147,7 @@
 				]
 			},
 			{
-	           "name": "AlgoBrix Boards",
+	           "name": "Tangible and GoAlgo",
 	           "architecture": "avr",
 	           "version": "0.1.5",
 	           "category": "contributed",
@@ -164,7 +164,7 @@
 				]
 			},
 			{
-	           "name": "AlgoBrix Boards",
+	           "name": "Tangible and GoAlgo",
 	           "architecture": "avr",
 	           "version": "0.1.4",
 	           "category": "contributed",
@@ -181,7 +181,7 @@
 				]
 			},
 			 {
-	           "name": "AlgoBrix Boards",
+	           "name": "Tangible and GoAlgo",
 	           "architecture": "avr",
 	           "version": "0.1.0",
 	           "category": "contributed",
@@ -199,7 +199,7 @@
 	        },
 		
 			{
-	           "name": "AlgoBrix Boards",
+	           "name": "Tangible and GoAlgo",
 	           "architecture": "avr",
 	           "version": "0.1.1",
 	           "category": "contributed",
@@ -217,7 +217,7 @@
 	        },
 			
 			{
-	           "name": "AlgoBrix Boards",
+	           "name": "Tangible and GoAlgo",
 	           "architecture": "avr",
 	           "version": "0.1.2",
 	           "category": "contributed",
