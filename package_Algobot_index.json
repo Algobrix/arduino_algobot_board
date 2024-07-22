@@ -1,7 +1,7 @@
 {
    "packages":[
       {
-         "name": "AlgoBot",
+         "name": "AlgoBrix",
          "maintainer": "YoungEngineers",		  
          "websiteURL": "https://www.youngengineers.org/",
          "email": "semir.tursunovic@microbitdesign.com",
@@ -10,6 +10,23 @@
 	   },
      	"platforms":
 		[
+			{
+	           "name": "Tangible and GoAlgo",
+	           "architecture": "avr",
+	           "version": "0.2.3",
+	           "category": "contributed",
+	           "url": "http://raw.githubusercontent.com/Algobrix/arduino_algobot_board/master/algobot_pack_0.2.3.zip",
+			   "checksum": "SHA-256:c75659b765693fbf2b1565d1b333c5402ed7c96f726eef8b1b4ec0fc49b6af45",
+	           "archiveFileName": "algobot_pack_0.2.3.zip",
+	           "size": "254441", 
+	           "boards":
+				[
+	              { "name": "AlgoBot_328PB" }
+				],
+	           "toolsDependencies":
+				[				
+				]
+			},
 			{
 	           "name": "AlgoBrix Boards",
 	           "architecture": "avr",
