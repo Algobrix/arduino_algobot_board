@@ -1,0 +1,30 @@
+# See: http://code.google.com/p/arduino/wiki/Platforms
+
+##############################################################
+
+menu.version=Version
+
+algobotpb.name=Tangible and GoAlgo Firmware
+algobotpb.upload.tool=avrdude
+algobotpb.upload.protocol=arduino
+algobotpb.upload.maximum_size=32256
+algobotpb.upload.maximum_data_size=2048
+algobotpb.upload.speed=115200
+
+algobotpb.bootloader.tool=avrdude
+algobotpb.bootloader.low_fuses=0xFF
+algobotpb.bootloader.high_fuses=0xDE
+algobotpb.bootloader.extended_fuses=0xFD
+algobotpb.bootloader.unlock_bits=0xFF
+algobotpb.bootloader.lock_bits=0xCF
+#algobotpb.bootloader.file=optiboot/optiboot_m328pb_autobaud.hex
+algobotpb.bootloader.file=optiboot/optiboot_atmega328pb.hex
+
+algobotpb.build.f_cpu=16000000L
+algobotpb.build.board=AVR_ALGO_BOT
+algobotpb.build.core=arduino:arduino
+algobotpb.build.variant=algobot_328pb
+algobotpb.build.mcu=atmega328pb
+
+algobotpb.vid.0 = 0x1A86
+algobotpb.pid.0 = 0x7523
