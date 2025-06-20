@@ -18,7 +18,7 @@
 	           "url": "http://raw.githubusercontent.com/Algobrix/arduino_algobot_board/master/algobot_pack_0.3.6.zip",
 			   "checksum": "SHA-256:b39ce63bd0ccd6d7bb967dad39c8f0cbf4fae5f70f1fb24e5035c146720fde20",
 	           "archiveFileName": "algobot_pack_0.3.6.zip",
-	           "size": "414192",
+	           "size": "414189",
 	           "boards":
 				[
 	              { "name": "AlgoBot_328PB" }
