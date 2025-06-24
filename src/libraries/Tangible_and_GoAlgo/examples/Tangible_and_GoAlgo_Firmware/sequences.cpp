@@ -104,7 +104,7 @@ void ground_zero(boolean dir, byte scriptRowId){   //Lower to ground zero
     setMotorInterrupt(2, -1, scriptRowId);
     encoderDuration = 0;
 	motorBalanceTimer = getSYSTIM();
-	motors[2].start(150, dir, scriptRowId);
+	motors[2].start(255, dir, scriptRowId);
   } 
   else    {
 	  // if(motorBalanceTimer + 50 <= millis())
@@ -228,7 +228,7 @@ boolean garbageCanLifter(byte scriptRowId) {
     case 1: { 
       // lift the garbage a bit from the ground. 
       motorAndDirection[2] = CCW; // CCW - UP
-      moveMotorEncoder(scriptRowId, 6200, motorAndDirection, 170);
+      moveMotorEncoder(scriptRowId, 6200, motorAndDirection, 255);
       break;
     }
     case 2: { 
@@ -237,7 +237,7 @@ boolean garbageCanLifter(byte scriptRowId) {
       soundPlayer.play(12, scriptRowId, true);
       motorAndDirection[0] = CW;
       motorAndDirection[1] = CCW;
-      moveMotorEncoder(scriptRowId, 18 * tenDegrees+220, motorAndDirection, 210);
+      moveMotorEncoder(scriptRowId, 18 * tenDegrees+220, motorAndDirection, 255);
       //debugSEQUENCESln(F("Case Rotate "));
       
       break;
@@ -278,7 +278,7 @@ boolean garbageCanLifter(byte scriptRowId) {
       if(loopCounter % 2 == 1) {
         motorAndDirection[2] = CCW;
       }
-      moveMotorEncoder(scriptRowId, 5, motorAndDirection, 200);
+      moveMotorEncoder(scriptRowId, 5, motorAndDirection, 255);
       delay (200);
       break;
     }
@@ -296,7 +296,7 @@ boolean garbageCanLifter(byte scriptRowId) {
     case 9: { // Lower the lift to ground zero    
       motorAndDirection[2] = CW; // CCW - UP
       //moveMotorEncoder(scriptRowId, 4200, motorAndDirection, 150);
-      moveMotorEncoder(scriptRowId, 5200, motorAndDirection, 150);
+      moveMotorEncoder(scriptRowId, 5200, motorAndDirection, 255);
       //debugSEQUENCESln(F("Case 8, Lower the lift 1500"));
       break; 
     } 
@@ -312,7 +312,7 @@ boolean garbageCanLifter(byte scriptRowId) {
       soundPlayer.play(12, scriptRowId, true);
       motorAndDirection[0] = CCW;
       motorAndDirection[1] = CW;
-      moveMotorEncoder(scriptRowId, 19 * tenDegrees+100 , motorAndDirection, 200);
+      moveMotorEncoder(scriptRowId, 19 * tenDegrees+100 , motorAndDirection, 255);
       break;
     }
     case 11: {
@@ -326,7 +326,7 @@ boolean garbageCanLifter(byte scriptRowId) {
     } 
     case 13: {
       motorAndDirection[2] = CCW; // CCW - UP
-      moveMotorEncoder(scriptRowId, 2200, motorAndDirection, 170);
+      moveMotorEncoder(scriptRowId, 2200, motorAndDirection, 255);
       break; 
     }
     default: {
@@ -384,7 +384,7 @@ boolean travelRandom(byte scriptRowId) {
           }
       }
       if (abs(moveRand) > 0) {
-        moveMotorEncoder(scriptRowId, abs(moveRand) * mapStep, motorAndDirection, 200);
+        moveMotorEncoder(scriptRowId, abs(moveRand) * mapStep, motorAndDirection, 255);
         }
       else {
         debugSEQUENCES(F("Move was 0, we try again\r\n"));
@@ -425,7 +425,7 @@ boolean travelRandom(byte scriptRowId) {
           }
         }   
       }
-      moveMotorEncoder(scriptRowId,  abs(rand_dir*tenDegrees), motorAndDirection, 210);
+      moveMotorEncoder(scriptRowId,  abs(rand_dir*tenDegrees), motorAndDirection, 255);
       break;
     } // close case 1
     case 3: { // do the loop
@@ -457,7 +457,7 @@ boolean travelRandom(byte scriptRowId) {
         }     
       }
       if (rand_dir >0) {
-        moveMotorEncoder(scriptRowId,  abs(rand_dir/10)*tenDegrees, motorAndDirection, 210);
+        moveMotorEncoder(scriptRowId,  abs(rand_dir/10)*tenDegrees, motorAndDirection, 255);
       }
       else {            nextCommand(scriptRowId); }
       break;
@@ -470,7 +470,7 @@ boolean travelRandom(byte scriptRowId) {
 //        debugSEQUENCES(F("Move Y at : ")); debugSEQUENCESln(moveRand);
       }      
       if (moveRand>0) {
-        moveMotorEncoder(scriptRowId,  moveRand* mapStep, motorAndDirection, 210);
+        moveMotorEncoder(scriptRowId,  moveRand* mapStep, motorAndDirection, 255);
       }
       else {            nextCommand(scriptRowId); }
       
@@ -493,7 +493,7 @@ boolean travelRandom(byte scriptRowId) {
         
       }
       if (rand_dir >0) {
-        moveMotorEncoder(scriptRowId,  abs(rand_dir*tenDegrees), motorAndDirection, 210);
+        moveMotorEncoder(scriptRowId,  abs(rand_dir*tenDegrees), motorAndDirection, 255);
       }
       else {            nextCommand(scriptRowId); }
       break;
@@ -506,7 +506,7 @@ boolean travelRandom(byte scriptRowId) {
       //  debugSEQUENCES(F("Move X at : ")); debugSEQUENCESln(moveRand);
       }
       if (moveRand>0) {
-        moveMotorEncoder(scriptRowId,  moveRand* mapStep, motorAndDirection, 210);
+        moveMotorEncoder(scriptRowId,  moveRand* mapStep, motorAndDirection, 255);
       }
       else {            nextCommand(scriptRowId); }
       break;
@@ -623,7 +623,7 @@ boolean ballKicker(byte scriptRowId) {
   switch(scriptRowArray[scriptRowId].counter) {
     case 0: { // ground zero
       motorAndDirection[2] = CW;
-      moveMotorTime(scriptRowId, 500, motorAndDirection, 85);
+      moveMotorTime(scriptRowId, 500, motorAndDirection, 255);
       break;
     }
     case 1: { // kick + Sound + led
@@ -640,8 +640,7 @@ boolean ballKicker(byte scriptRowId) {
       leds[0].stop(scriptRowId);
       leds[1].stop(scriptRowId);
       motorAndDirection[2] = CW;
-      moveMotorTime(scriptRowId, 1000, motorAndDirection, 85);
-      //moveMotorEncoder(scriptRowId, 500, motorAndDirection, 85);
+      moveMotorTime(scriptRowId, 1000, motorAndDirection, 255);
       break;
     }
     default: {
@@ -696,14 +695,14 @@ boolean squareMovement(byte scriptRowId) {
       motorAndDirection[0] = CCW;
       motorAndDirection[1] = CCW;
       startLoopCommand(4);
-      moveMotorEncoder(scriptRowId, 2 * mapStep, motorAndDirection, 200);
+      moveMotorEncoder(scriptRowId, 2 * mapStep, motorAndDirection, 255);
       break;
     }
     case 1: {
       soundPlayer.play(14, scriptRowId, true);
       motorAndDirection[0] = CW;
       motorAndDirection[1] = CCW;
-      moveMotorEncoder(scriptRowId, 9 * tenDegrees, motorAndDirection, 170);
+      moveMotorEncoder(scriptRowId, 9 * tenDegrees, motorAndDirection, 255);
       break;
     }
     case 2: {
@@ -780,7 +779,7 @@ boolean ledMonkeyMove(byte scriptRowId) {
     case 3: {
       motorAndDirection[0] = CCW;
       motorAndDirection[1] = CCW;
-      moveMotorEncoder(scriptRowId, 9 * tenDegrees, motorAndDirection, 170);
+      moveMotorEncoder(scriptRowId, 9 * tenDegrees, motorAndDirection, 255);
       break;
     }
     case 4: {
