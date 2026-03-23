@@ -10,7 +10,23 @@
 	   },
      	"platforms":
 		[
-		
+			{
+	           "name": "Tangible and GoAlgo",
+	           "architecture": "avr",
+	           "version": "0.3.16",
+	           "category": "contributed",
+	           "url": "http://raw.githubusercontent.com/Algobrix/arduino_algobot_board/master/algobot_pack_0.3.16.zip",
+			   "checksum": "SHA-256:863b512d9cd0ba300e3e48ec698a98fed9891809faeba9434b80e0c73fa1fecc",
+	           "archiveFileName": "algobot_pack_0.3.16.zip",
+	           "size": "346729",
+	           "boards":
+				[
+	              { "name": "AlgoBot_328PB" }
+				],
+	           "toolsDependencies":
+				[				
+				]
+			},
 			{
 	           "name": "Tangible and GoAlgo",
 	           "architecture": "avr",
