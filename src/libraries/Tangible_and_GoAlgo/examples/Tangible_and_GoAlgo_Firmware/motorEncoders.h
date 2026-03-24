@@ -25,7 +25,8 @@ extern byte scriptRowIdEncoderC;
 //int tenDegrees = 157; // sets the rotations 3 PPR motor
 extern int mapStep; // snail transmission 6 PPR motor
 //int mapStep = 4550; // snail transmission 6 PPR motor 20 cm
-extern int tenDegrees; // sets the rotations 6 PPR motor
+extern float tenDegrees90;
+extern float tenDegrees180; // sets the rotations 6 PPR motor
 extern int diff;
 extern int preDiff; // parameter for PD control
 

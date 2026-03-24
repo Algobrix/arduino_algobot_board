@@ -13,12 +13,16 @@
 byte scriptRowIdEncoderA = 0;
 byte scriptRowIdEncoderB = 0;
 byte scriptRowIdEncoderC = 0;
+extern uint8_t parsingMode;
 
 //int mapStep = 1555; // snail transmission 3 PPR motor
 //int tenDegrees = 157; // sets the rotations 3 PPR motor
 int mapStep = 3050; // snail transmission 6 PPR motor
 //int mapStep = 4550; // snail transmission 6 PPR motor 20 cm
-int tenDegrees = 295; // sets the rotations 6 PPR motor
+float tenDegrees180 = 289; 
+float tenDegrees90 = 290.5;
+
+
 int diff = 0;
 int preDiff = 0; // parameter for PD control
 
@@ -306,6 +310,11 @@ ISR(TIMER3_COMPA_vect)
 {
   noInterrupts();
   motors[0].stop(scriptRowIdEncoderA);
+  if((parsingMode == 2) || (parsingMode == 3) || (parsingMode==4))
+  {
+    motors[1].stop(scriptRowIdEncoderB);   
+  }
+
 //debugENCODER(F("ISR: 0, stop A\r\n"));
   checkEncodersOfMotor(0);
   interrupts();
@@ -314,6 +323,11 @@ ISR(TIMER3_COMPA_vect)
 ISR(TIMER1_COMPA_vect) 
 {
   noInterrupts();
+  
+  if((parsingMode == 2) || (parsingMode == 3) || (parsingMode==4))
+  {
+    motors[0].stop(scriptRowIdEncoderA); 
+  }
   motors[1].stop(scriptRowIdEncoderB);
 //debugENCODER(F("ISR: 1, stop B\r\n"));
   checkEncodersOfMotor(1);

@@ -20,6 +20,7 @@
 
 /* Private variables ******************************************************* */
 boolean changeSpeed = 1; 
+uint8_t parsingMode;
 
 /* Private function prototypes ********************************************* */
 
@@ -707,7 +708,7 @@ boolean processMoveMotor(byte scriptRowId)
     byte power = scriptRowArray[scriptRowId].dataBytes[1];
     byte duration = scriptRowArray[scriptRowId].dataBytes[3];
     boolean isInfinity = scriptRowArray[scriptRowId].dataBytes[4] & B00001000;
-    byte parsingMode = scriptRowArray[scriptRowId].dataBytes[7];
+    parsingMode = scriptRowArray[scriptRowId].dataBytes[7];
     int encA = 0;
     int encB = 0;
     int encC = 0;
@@ -761,7 +762,15 @@ boolean processMoveMotor(byte scriptRowId)
             case 3: 
             {
                 scriptRowArray[scriptRowId].duration = -1;
-                encoderDuration = duration * tenDegrees;
+
+                if(duration <= 9)
+                {
+                    encoderDuration = duration * tenDegrees90;
+                }
+                else
+                {
+                    encoderDuration = duration * tenDegrees180;
+                }
                 break;
             }
             // case 4 - Random Rotation Degrees --> duration is a random time between 1 - dataBytes[3] seconds \ 1 - 10 seconds by default if dataBytes[3] is 0
@@ -809,11 +818,6 @@ boolean processMoveMotor(byte scriptRowId)
             if(motorAndDirection[i] != 255) {
                 setMotorInterrupt(i, encoderDuration, scriptRowId);
                 motors[i].start(motorPowerHelper(power), motorAndDirection[i], scriptRowId);
-                debugRUN(F("Run motor ["));
-                debugRUN(i);
-                debugRUN(F("] with power ["));
-                debugRUN(motorPowerHelper(power));
-                debugRUN(F("]\r\n"));
             }
         }
         preDiff = 0; // So that next iteration also starts with PreDiff = 0;
@@ -866,11 +870,11 @@ boolean processMoveMotor(byte scriptRowId)
                 changeSpeed = motorBalanceSpeed();
                 if (changeSpeed==1) 
                 {
-                    debugRUN(F("New Powers. Pow_A: ")); 
-                    debugRUN(tempPowerA); 
-                    debugRUN(F("  ||  Pow_B: ")); 
-                    debugRUN(tempPowerB); 
-                    debugRUN(F("\r\n************************\r\n"));
+                    //debugRUN(F("New Powers. Pow_A: ")); 
+                    //debugRUN(tempPowerA); 
+                    //debugRUN(F("  ||  Pow_B: ")); 
+                    //debugRUN(tempPowerB); 
+                    //debugRUN(F("\r\n************************\r\n"));
                     motors[0].changeSpeed(tempPowerA); 
                     motors[1].changeSpeed(tempPowerB); 
                     motorBalanceTimer = getSYSTIM();      
