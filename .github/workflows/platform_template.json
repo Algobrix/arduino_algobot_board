@@ -4,19 +4,19 @@
 # Properties like version, download url and checksum are derived and
 # filled in automatically.
 {
-   "name": "AlgoC",
+   "name": "Tangible and GoAlgo",
    "architecture": "avr",
    "version": "",
-   "category": "Contributed",
+   "category": "contributed",
    "url": "",
    "archiveFileName": "",
    "checksum": "",
    "size": "",
    "help": {
-      "online": "https://github.com/Algobrix/algoc"
+      "online": "https://github.com/Algobrix/arduino_algobot_board"
    },
    "boards":[
-      { "name": "AlgoC_328PB" }
+      { "name": "AlgoBot_328PB" }
    ],
    "toolsDependencies":[]
 }
