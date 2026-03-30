@@ -15,7 +15,10 @@
 /* Exported constants ****************************************************** */
 
 /* Exported macros ********************************************************* */
-#define FIRMWARE_VERSION		0x46
+#define FIRMWARE_VERSION_MAJOR        0
+#define FIRMWARE_VERSION_MINOR        3
+#define FIRMWARE_VERSION_STRING       "0.3"
+#define FIRMWARE_VERSION              ((uint8_t)(((FIRMWARE_VERSION_MAJOR & 0x0f) << 4) | (FIRMWARE_VERSION_MINOR & 0x0f)))
 /* Exported types ********************************************************** */
 
 /* Exported variables ****************************************************** */

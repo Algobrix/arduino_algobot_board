@@ -14,9 +14,9 @@ void setup()
 {
     initDEBUG(115200);
     printDEBUG("Algobrain Software ");
-    printDEBUG((FIRMWARE_VERSION >> 4) & 0x0f);
+    printDEBUG(FIRMWARE_VERSION_MAJOR);
     printDEBUG(".");
-    printDEBUG((FIRMWARE_VERSION) & 0x0f);
+    printDEBUG(FIRMWARE_VERSION_MINOR);
     printDEBUG("\r\n");
     sleepTimeoutMillis = getSYSTIM();
     randomSeed(getSYSTIM());

@@ -60,6 +60,22 @@ else
   exit 1
 fi
 
+FWVER_FILE="$PACKAGE_DIR/libraries/Tangible_and_GoAlgo/examples/Tangible_and_GoAlgo_Firmware/fwver.h"
+if [[ -f "$FWVER_FILE" ]]; then
+  IFS='.' read -r VERSION_MAJOR VERSION_MINOR VERSION_PATCH <<< "$VERSION"
+
+  if [[ -z "${VERSION_MAJOR:-}" || -z "${VERSION_MINOR:-}" ]]; then
+    echo "Expected semantic version x.y.z, got '$VERSION'" >&2
+    exit 1
+  fi
+
+  sed -i \
+    -e "s/^#define FIRMWARE_VERSION_MAJOR.*/#define FIRMWARE_VERSION_MAJOR        $VERSION_MAJOR/" \
+    -e "s/^#define FIRMWARE_VERSION_MINOR.*/#define FIRMWARE_VERSION_MINOR        $VERSION_MINOR/" \
+    -e "s/^#define FIRMWARE_VERSION_STRING.*/#define FIRMWARE_VERSION_STRING       \"$VERSION_MAJOR.$VERSION_MINOR\"/" \
+    "$FWVER_FILE"
+fi
+
 rm -f "$ARCHIVE_PATH"
 
 (
