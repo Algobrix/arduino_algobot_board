@@ -2,7 +2,18 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SOURCE_DIR="${1:-$ROOT_DIR/src}"
+SOURCE_DIR="${1:-}"
+
+if [[ -z "$SOURCE_DIR" ]]; then
+  if [[ -f "$ROOT_DIR/platform.txt" ]]; then
+    SOURCE_DIR="$ROOT_DIR"
+  elif [[ -f "$ROOT_DIR/src/platform.txt" ]]; then
+    SOURCE_DIR="$ROOT_DIR/src"
+  else
+    echo "platform.txt not found in repository root or src/" >&2
+    exit 1
+  fi
+fi
 
 if [[ ! -f "$SOURCE_DIR/platform.txt" ]]; then
   echo "platform.txt not found in $SOURCE_DIR" >&2
@@ -31,7 +42,16 @@ cleanup() {
 trap cleanup EXIT
 
 mkdir -p "$PACKAGE_DIR"
-cp -a "$SOURCE_DIR"/. "$PACKAGE_DIR"/
+
+if [[ "$SOURCE_DIR" == "$ROOT_DIR" ]]; then
+  for entry in platform.txt boards.txt programmers.txt bootloaders variants libraries cores tools; do
+    if [[ -e "$SOURCE_DIR/$entry" ]]; then
+      cp -a "$SOURCE_DIR/$entry" "$PACKAGE_DIR/"
+    fi
+  done
+else
+  cp -a "$SOURCE_DIR"/. "$PACKAGE_DIR"/
+fi
 
 if grep -q '^version=' "$PACKAGE_DIR/platform.txt"; then
   sed -i "s/^version=.*/version=$VERSION/" "$PACKAGE_DIR/platform.txt"
