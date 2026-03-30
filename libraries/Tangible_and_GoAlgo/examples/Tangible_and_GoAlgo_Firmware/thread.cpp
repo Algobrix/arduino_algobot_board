@@ -40,7 +40,7 @@ void Thread::reset() {
 
 
 void threadsInit() {
-  for (int i = 0; i < NUM_OF_THREADS; i++) {
+  for (int i = 0; i < totalRowsInData; i++) {
     threadArray[i].reset();
   }
   currentThread = 0;

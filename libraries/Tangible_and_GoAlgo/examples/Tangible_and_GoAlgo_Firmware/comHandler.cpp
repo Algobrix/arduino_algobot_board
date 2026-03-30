@@ -21,12 +21,6 @@ boolean ComHandler::isBleConnected(void)
     return digitalRead(BLE_EN_PIN);
 }
 
-bool ComHandler::isTransmitBufferFull(void)
-{
-    uint8_t next_widx = (tx_widx + 1) % TRANSMIT_SERIAL_BUFFER_SIZE;
-    return (next_widx == tx_ridx);
-}
-
 void ComHandler::sendMsgToPlayCube(byte msg[2]) 
 {
 	// if(isBleConnected() != true)
@@ -206,10 +200,7 @@ void ComHandler::processIncomingData() {
 }
 
 void ComHandler::sendStartPlayData() {
-    if (isTransmitBufferFull()) {
-        debugCOM("TX buffer full");
-        return;
-    }
+
     transmitSerialBuffer[tx_widx][0] = OP_COMMAND_CONFIRM_START_OF_PLAY_DATA;
     transmitSerialBuffer[tx_widx][1] = rxData[MESSAGE_BUFFER_ROW];
     tx_widx++;
@@ -221,10 +212,6 @@ void ComHandler::sendStartPlayData() {
 }
 
 void ComHandler::sendEndOfPlayData() {
-	if (isTransmitBufferFull()) {
-        debugCOM("TX buffer full");
-        return;
-    }
     transmitSerialBuffer[tx_widx][0] = OP_COMMAND_CONFIRM_END_DATA_PLAY_MODE;
     transmitSerialBuffer[tx_widx][1] = 0;
     tx_widx++;
@@ -242,10 +229,6 @@ void ComHandler::sendEndOfPlayData() {
  * @param rowId is the row that excuted the command
  */
 void ComHandler::sendRowExecute(byte opCommand, byte rowId) {
-	if (isTransmitBufferFull()) {
-        debugCOM("TX buffer full");
-        return;
-    }
     transmitSerialBuffer[tx_widx][0] = opCommand;
     transmitSerialBuffer[tx_widx][1] = rowId;
     tx_widx++;
@@ -258,10 +241,6 @@ void ComHandler::sendRowExecute(byte opCommand, byte rowId) {
 
 void ComHandler::sendBatteryLevel(uint16_t level) 
 {
-	if (isTransmitBufferFull()) {
-        debugCOM("TX buffer full");
-        return;
-    }
 	if(isBleConnected() == true)
     {
         transmitSerialBuffer[tx_widx][0] = OP_COMMAND_BATTERY_LEVEL;
@@ -279,10 +258,6 @@ void ComHandler::sendBatteryLevel(uint16_t level)
 }
 void ComHandler::sendFirmwareVersion(uint8_t fwver) 
 {
-	if (isTransmitBufferFull()) {
-        debugCOM("TX buffer full");
-        return;
-    }
     if(isBleConnected() == true)
     {
         transmitSerialBuffer[tx_widx][0] = OP_COMMAND_FIRMWARE_VERSION;
@@ -298,10 +273,6 @@ void ComHandler::sendFirmwareVersion(uint8_t fwver)
 
 
 void ComHandler::sendRowConfirm(byte row) {
-	if (isTransmitBufferFull()) {
-        debugCOM("TX buffer full");
-        return;
-    }
     transmitSerialBuffer[tx_widx][0] = OP_COMMAND_CONFIRM_START_OF_PLAY_DATA_ROW;
     transmitSerialBuffer[tx_widx][1] = row;
     tx_widx++;
@@ -312,10 +283,6 @@ void ComHandler::sendRowConfirm(byte row) {
 }
 
 void ComHandler::sendReceiveDataError() {
-	if (isTransmitBufferFull()) {
-        debugCOM("TX buffer full");
-        return;
-    }
     transmitSerialBuffer[tx_widx][0] = OP_COMMAND_ERROR_ON_RECEIVED_DATA;
     transmitSerialBuffer[tx_widx][1] = 0;
     tx_widx++;
@@ -326,10 +293,6 @@ void ComHandler::sendReceiveDataError() {
 }
 
 void ComHandler::sendStopPlayConfirm() {
-	if (isTransmitBufferFull()) {
-        debugCOM("TX buffer full");
-        return;
-    }
     transmitSerialBuffer[tx_widx][0] = OP_COMMAND_CONFIRM_STOP;
     transmitSerialBuffer[tx_widx][1] = 0;
     tx_widx++;
@@ -343,10 +306,6 @@ void ComHandler::sendStopPlayConfirm() {
 }
 
 void ComHandler::sendEndOfPlay() {
-	if (isTransmitBufferFull()) {
-        debugCOM("TX buffer full");
-        return;
-    }
     transmitSerialBuffer[tx_widx][0] = OP_COMMAND_END_OF_PLAY;
     transmitSerialBuffer[tx_widx][1] = 0;
     tx_widx++;

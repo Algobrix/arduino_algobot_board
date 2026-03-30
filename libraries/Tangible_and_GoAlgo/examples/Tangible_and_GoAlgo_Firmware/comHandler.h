@@ -64,7 +64,7 @@ enum COMHANDLER_STATE
     COMHANDLER_STATE_WAIT,
 };
 
-#define TRANSMIT_SERIAL_BUFFER_SIZE             62  // NUM_OF_THREADS*2 + 2
+#define TRANSMIT_SERIAL_BUFFER_SIZE             32
 /* Exported macros ********************************************************* */
 
 /* Exported types ********************************************************** */
@@ -78,7 +78,6 @@ class ComHandler {
         byte rxDataIDX = 0;  // Current Received Byte
         unsigned long timer = 0; // To mark the last byte Receive time (for timeout)
         boolean isBleConnected(void);
-        bool isTransmitBufferFull(void);
         void sendMsgToPlayCube(byte msg[2]);
 		uint32_t battery_timer;
         uint32_t send_timer;

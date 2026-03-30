@@ -1,0 +1,24 @@
+# This file is used by a github action to automatically publish
+# releases. This file contains just a single version of the platform, to
+# be added into "packages.platforms" array in an existing json file.
+# Properties like version, download url and checksum are derived and
+# filled in automatically.
+{
+   "name": "AlgoC",
+   "architecture": "avr",
+   "version": "",
+   "category": "Contributed",
+   "url": "",
+   "archiveFileName": "",
+   "checksum": "",
+   "size": "",
+   "help": {
+      "online": "https://github.com/Algobrix/algoc"
+   },
+   "boards":[
+      { "name": "AlgoC_328PB" }
+   ],
+   "toolsDependencies":[]
+}
+
+ 
