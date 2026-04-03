@@ -21,6 +21,7 @@ extern boolean isScriptLoaded;
 extern boolean isPlayingFromBrain;
 extern unsigned long sleepTimeoutMillis;
 extern boolean noiseForLowBattery; 
+extern boolean isAiCommandWaiting;
 
 /* Exported functions ****************************************************** */
 void sleepTimeoutCheck();

@@ -21,6 +21,19 @@ SoundPlayer::SoundPlayer(const byte txPin, const byte statePin) : soundSerial(tx
     setVolume(4);
     soundSerial.begin(115200);
 }
+
+void SoundPlayer::sendTrackCommand(byte trackNumber) {
+    char command[7] = {'p', ' ', '0', '0', '0', '0', '\0'};
+    command[5] = '0' + (trackNumber % 10);
+    trackNumber /= 10;
+    command[4] = '0' + (trackNumber % 10);
+    trackNumber /= 10;
+    command[3] = '0' + (trackNumber % 10);
+    trackNumber /= 10;
+    command[2] = '0' + (trackNumber % 10);
+    soundSerial.println(command);
+}
+
 void SoundPlayer::play(byte trackId, byte scriptRowId, boolean untillStop) {
     if(this->scriptRowId != 0 && isPlaying() && !untillStop) {
         prematureEndSoundScript(this->scriptRowId);
@@ -29,20 +42,18 @@ void SoundPlayer::play(byte trackId, byte scriptRowId, boolean untillStop) {
     if(trackId != 255) {
         if(untillStop) {
             if(!isPlaying()) {
-                String trackCommand = getTrackCommand(trackId);
                 this->currentTrack = trackId;
                 this->scriptRowId = scriptRowId;
                 this->startMillis = getSYSTIM();
                 this->isOn = true;
-                this->soundSerial.println(trackCommand);
+                sendTrackCommand(trackId);
             }
         } else {
-            String trackCommand = getTrackCommand(trackId);
             this->currentTrack = trackId;
             this->scriptRowId = scriptRowId;
             this->startMillis = getSYSTIM();
             this->isOn = true;
-            this->soundSerial.println(trackCommand);
+            sendTrackCommand(trackId);
         }
     }
     // If we didnt get a trackId, this play function will act as a stop to the currentTrack that is playing.
@@ -51,11 +62,10 @@ void SoundPlayer::play(byte trackId, byte scriptRowId, boolean untillStop) {
     }
 }
 void SoundPlayer::stop() {
-    String trackCommand = getTrackCommand(this->currentTrack);
     this->scriptRowId = 0;
     this->startMillis = -1;
     if(isPlaying()) {
-        this->soundSerial.println(trackCommand); // If a track is playing, we send it again to stop it.
+        sendTrackCommand(this->currentTrack); // If a track is playing, we send it again to stop it.
     }
     this->currentTrack = 0;
 }
@@ -64,19 +74,18 @@ void SoundPlayer::setVolume(int volumeLevel)
     debugSOUND(F("Set sound output value to: "));
     debugSOUND(volumeLevel);
     debugSOUND(F("\r\n"));
-    soundSerial.println(volume[volumeLevel]);
-}
-String SoundPlayer::getTrackCommand(byte trackNumber) {
-    // The command that we get is:
-    // p 00xx --> xx = number of the file
-    String command = "p ";
-    // Create starting 0's
-    // Example: trackId is 10 (size of 2 chars\digits) the command will be "p 0010"
-    for(int i = String(trackNumber).length(); i < 4; i++) {
-        command += "0";
+    switch (volumeLevel) {
+        case 0: soundSerial.println('B'); break;
+        case 1: soundSerial.println('D'); break;
+        case 2: soundSerial.println('E'); break;
+        case 3: soundSerial.println('I'); break;
+        case 4: soundSerial.println('K'); break;
+        case 5: soundSerial.println('L'); break;
+        case 6: soundSerial.println('M'); break;
+        case 7: soundSerial.println('P'); break;
+        case 8: soundSerial.println('T'); break;
+        default: soundSerial.println('t'); break;
     }
-    command += String(trackNumber);
-    return command;
 }
 boolean SoundPlayer::isPlaying() {
     // Short delay to let the state pin go high

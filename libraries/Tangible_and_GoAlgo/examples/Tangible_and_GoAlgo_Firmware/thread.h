@@ -22,7 +22,6 @@ class Thread {
         byte scriptRowId = 0;
         byte threadBelongsToLoopRowId = 0;        // If a thread was opened within a loop, it belongs to it.
         byte loopRowIdThatOpenedInThisThread = 0; // Keeps the last loop that has been opened in this thread.
-        uint8_t sequanceRunFlag;
 
         void start();
         void stop();

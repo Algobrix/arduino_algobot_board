@@ -35,6 +35,7 @@ boolean processLed(byte scriptRowId);
 boolean processStop(byte scriptRowId);
 boolean processWaitSensor(byte scriptRowId);
 boolean processWait(byte scriptRowId);
+boolean processAI(byte scriptRowId);
 boolean processSound(byte scriptRowId);
 boolean processSequence(byte scriptRowId);
 

@@ -22,7 +22,8 @@ const typedef enum {
   TYPE_LED = 9,
   TYPE_COMBINE_THREAD = 10,
   TYPE_STOP = 11,
-  TYPE_PROGRAM = 12
+  TYPE_PROGRAM = 12,
+  TYPE_AI = 13,
 } scriptRowType;
 /* Exported macros ********************************************************* */
 

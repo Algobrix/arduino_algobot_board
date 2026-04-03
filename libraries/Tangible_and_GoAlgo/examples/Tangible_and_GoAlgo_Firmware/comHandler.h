@@ -44,6 +44,7 @@
 #define OP_COMMAND_ROW_EXECUTION_PREMATURE_END 208
 #define OP_COMMAND_END_OF_PLAY 209
 #define OP_COMMAND_CONFIRM_STOP 210
+#define OP_COMMAND_AI_EVENT_DETECTED 230
 #define OP_COMMAND_ERROR 240
 #define OP_COMMAND_ERROR_ON_RECEIVED_DATA 241
 #define OP_COMMAND_BATTERY_LEVEL 250
@@ -64,7 +65,7 @@ enum COMHANDLER_STATE
     COMHANDLER_STATE_WAIT,
 };
 
-#define TRANSMIT_SERIAL_BUFFER_SIZE             62  // NUM_OF_THREADS*2 + 2
+#define TRANSMIT_SERIAL_BUFFER_SIZE             50  // NUM_OF_THREADS(24)*2 + 2
 /* Exported macros ********************************************************* */
 
 /* Exported types ********************************************************** */
@@ -80,7 +81,6 @@ class ComHandler {
         boolean isBleConnected(void);
         bool isTransmitBufferFull(void);
         void sendMsgToPlayCube(byte msg[2]);
-		uint32_t battery_timer;
         uint32_t send_timer;
         uint8_t state;
 

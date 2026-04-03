@@ -116,6 +116,11 @@ void processScriptRow(byte scriptRowId)
             isScriptRowDone = processWait(scriptRowId);
             break;
         }
+        case TYPE_AI:
+        {
+            isScriptRowDone = processAI(scriptRowId);
+            break;
+        }
         case TYPE_SOUND:
         {
             isScriptRowDone = processSound(scriptRowId);
@@ -599,6 +604,21 @@ boolean processWait(byte scriptRowId) {
       isScriptRowDone = true;
     }
   }
+  return isScriptRowDone;
+}
+
+boolean processAI(byte scriptRowId) {
+  boolean isScriptRowDone = false;
+
+  if (scriptRowArray[scriptRowId].startTime == -1) {
+    startScriptRow(scriptRowId);
+    scriptRowArray[scriptRowId].startTime = getSYSTIM();
+  } else if (isAiCommandWaiting) {
+    isAiCommandWaiting = false;
+    finishedScriptRow(scriptRowId);
+    isScriptRowDone = true;
+  }
+
   return isScriptRowDone;
 }
 

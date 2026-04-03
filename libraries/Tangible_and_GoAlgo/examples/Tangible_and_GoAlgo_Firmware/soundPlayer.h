@@ -19,7 +19,7 @@ class SoundPlayer {
         unsigned long startMillis = -1;
         boolean isOn = false;
         byte currentTrack = 0;
-        char volume[10] = {'B', 'D', 'E', 'I', 'K', 'L', 'M', 'P', 'T', 't'}; // 'B'(LOWEST)...'t'(HIGHEST-DEFAULT)
+        void sendTrackCommand(byte trackNumber);
 
     public:
         byte scriptRowId = 0;
@@ -27,7 +27,6 @@ class SoundPlayer {
         void play(byte trackId, byte scriptRowId, boolean untillStop=false);
         void stop();
         void setVolume(int volumeLevel);
-        String getTrackCommand(byte trackNumber);
         boolean isPlaying();
 };
 

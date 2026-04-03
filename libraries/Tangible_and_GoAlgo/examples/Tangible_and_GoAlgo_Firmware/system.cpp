@@ -21,6 +21,7 @@ boolean isScriptLoaded = false;
 boolean isPlayingFromBrain = false;
 unsigned long sleepTimeoutMillis;
 boolean noiseForLowBattery = false; // this will work, only on startup
+boolean isAiCommandWaiting = false;
 /* Private function prototypes ********************************************* */
 
 /* Exported functions ****************************************************** */
@@ -141,6 +142,12 @@ void processMessage()
       case OP_COMMAND_ERROR_ON_SENT_DATA: 
       {
           debugSYS(F("There was an error on the sent data\r\n"));
+          break;
+      }
+      case OP_COMMAND_AI_EVENT_DETECTED:
+      {
+          isAiCommandWaiting = true;
+          debugSYS(F("AI event detected command received\r\n"));
           break;
       }
   }
