@@ -85,6 +85,9 @@ jobs:
         if [[ ! -f "output/${OUTPUT_FILENAME}" ]]; then
           cp "source/${OUTPUT_FILENAME}" "output/${OUTPUT_FILENAME}"
         fi
+        TMP_INDEX="$(mktemp)"
+        jq '.packages[0].name = "algobrixdev"' "output/${OUTPUT_FILENAME}" > "$TMP_INDEX"
+        mv "$TMP_INDEX" "output/${OUTPUT_FILENAME}"
         TEMPLATE_PATH="source/${TEMPLATE_FILENAME}"
         if [[ ! -f "$TEMPLATE_PATH" ]]; then
           BASE_TEMPLATE="source/.github/workflows/platform_template.json"
