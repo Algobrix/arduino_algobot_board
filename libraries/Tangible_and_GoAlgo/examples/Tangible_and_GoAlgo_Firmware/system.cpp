@@ -22,6 +22,8 @@ boolean isPlayingFromBrain = false;
 unsigned long sleepTimeoutMillis;
 boolean noiseForLowBattery = false; // this will work, only on startup
 boolean isAiCommandWaiting = false;
+uint8_t aiEventId = 0;
+uint8_t aiEventValue = 0;
 /* Private function prototypes ********************************************* */
 
 /* Exported functions ****************************************************** */
@@ -146,8 +148,14 @@ void processMessage()
       }
       case OP_COMMAND_AI_EVENT_DETECTED:
       {
+          aiEventId = messageToProcess[MESSAGE_BUFFER_ROW];
+          aiEventValue = messageToProcess[MESSAGE_BUFFER_THREAD];
           isAiCommandWaiting = true;
-          debugSYS(F("AI event detected command received\r\n"));
+          debugSYS(F("AI event detected command received id="));
+          debugSYS(aiEventId);
+          debugSYS(F(" value="));
+          debugSYS(aiEventValue);
+          debugSYS(F("\r\n"));
           break;
       }
   }

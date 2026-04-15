@@ -609,14 +609,38 @@ boolean processWait(byte scriptRowId) {
 
 boolean processAI(byte scriptRowId) {
   boolean isScriptRowDone = false;
+  byte expectedEventId = scriptRowArray[scriptRowId].dataBytes[0];
+  byte expectedEventValue = scriptRowArray[scriptRowId].dataBytes[1];
 
   if (scriptRowArray[scriptRowId].startTime == -1) {
     startScriptRow(scriptRowId);
     scriptRowArray[scriptRowId].startTime = getSYSTIM();
+    debugRUN(F("Waiting for AI event id="));
+    debugRUN(expectedEventId);
+    debugRUN(F(" value="));
+    debugRUN(expectedEventValue);
+    debugRUN(F("\r\n"));
   } else if (isAiCommandWaiting) {
-    isAiCommandWaiting = false;
-    finishedScriptRow(scriptRowId);
-    isScriptRowDone = true;
+    if ((aiEventId == expectedEventId) && (aiEventValue == expectedEventValue)) {
+      isAiCommandWaiting = false;
+      finishedScriptRow(scriptRowId);
+      isScriptRowDone = true;
+      debugRUN(F("AI event matched id="));
+      debugRUN(aiEventId);
+      debugRUN(F(" value="));
+      debugRUN(aiEventValue);
+      debugRUN(F("\r\n"));
+    } else {
+      debugRUN(F("AI event ignored expected id="));
+      debugRUN(expectedEventId);
+      debugRUN(F(" value="));
+      debugRUN(expectedEventValue);
+      debugRUN(F(" received id="));
+      debugRUN(aiEventId);
+      debugRUN(F(" value="));
+      debugRUN(aiEventValue);
+      debugRUN(F("\r\n"));
+    }
   }
 
   return isScriptRowDone;

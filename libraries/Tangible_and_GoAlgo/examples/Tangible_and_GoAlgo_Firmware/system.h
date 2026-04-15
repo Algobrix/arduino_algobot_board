@@ -22,6 +22,8 @@ extern boolean isPlayingFromBrain;
 extern unsigned long sleepTimeoutMillis;
 extern boolean noiseForLowBattery; 
 extern boolean isAiCommandWaiting;
+extern uint8_t aiEventId;
+extern uint8_t aiEventValue;
 
 /* Exported functions ****************************************************** */
 void sleepTimeoutCheck();

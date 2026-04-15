@@ -23,7 +23,9 @@ Important files and folders:
 - `tools/`
 - `libraries/`
 - `package_Algobot_index.json`
+- `package_Algobot_dev_index.json`
 - `.github/workflows/publish-releases.yml`
+- `.github/workflows/publish-dev-package.yml`
 - `scripts/build-package.sh`
 - `scripts/update-package-index.sh`
 
@@ -146,3 +148,23 @@ Development happens in the repo.
 Releases happen from a GitHub Release tag.
 
 The workflow builds the ZIP, updates package metadata, updates firmware/package version values inside the artifact, uploads the ZIP, and publishes the new package entry automatically.
+
+## Dev Package Channel (Team Sharing)
+
+If you want to share in-progress builds with your team, use the separate dev package index:
+
+`https://raw.githubusercontent.com/Algobrix/arduino_algobot_board/dev-package-index/package_Algobot_dev_index.json`
+
+This channel is independent from stable releases and does not change `package_Algobot_index.json`.
+
+### How to publish a dev package
+
+1. Open GitHub `Actions`.
+2. Run workflow: `Publish Dev Package`.
+3. Optionally provide a custom version (`x.y.z`), or leave empty to auto-generate `0.0.<run_number>`.
+4. The workflow:
+   - builds `algobot_pack_<version>.zip`
+   - updates `package_Algobot_dev_index.json`
+   - pushes ZIP + index to branch `dev-package-index`
+
+Team members can add the dev URL above to Additional Boards Manager URLs to install the latest shared dev build.
