@@ -1,0 +1,15 @@
+{
+  "packages": [
+    {
+      "name": "AlgoBrix",
+      "maintainer": "YoungEngineers",
+      "websiteURL": "https://www.youngengineers.org/",
+      "email": "semir.tursunovic@microbitdesign.com",
+      "help": {
+        "online": "https://www.youngengineers.org/"
+      },
+      "platforms": [],
+      "tools": []
+    }
+  ]
+}
