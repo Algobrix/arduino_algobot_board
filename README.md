@@ -159,12 +159,23 @@ This channel is independent from stable releases and does not change `package_Al
 
 ### How to publish a dev package
 
-1. Open GitHub `Actions`.
-2. Run workflow: `Publish Dev Package`.
-3. Optionally provide a custom version (`x.y.z`), or leave empty to auto-generate `0.0.<run_number>`.
-4. The workflow:
+1. Create and publish a GitHub Release from a branch that is not `master`.
+2. Use a semantic tag (for example `v0.4.0`).
+3. The dev workflow runs automatically and:
    - builds `algobot_pack_<version>.zip`
+   - uploads it to that release
+   - marks the release as `prerelease`
    - updates `package_Algobot_dev_index.json`
-   - pushes ZIP + index to branch `dev-package-index`
+   - pushes updated dev index to branch `dev-package-index`
 
 Team members can add the dev URL above to Additional Boards Manager URLs to install the latest shared dev build.
+
+## Stable vs Dev Release Rules
+
+- Release with `target_commitish=master`:
+  - runs `publish-releases.yml`
+  - updates `package_Algobot_index.json` (stable channel)
+- Release with `target_commitish!=master`:
+  - runs `publish-dev-package.yml`
+  - marks GitHub Release as `prerelease`
+  - updates `package_Algobot_dev_index.json` (dev channel)

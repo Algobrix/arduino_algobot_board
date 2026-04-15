@@ -1,4 +1,4 @@
-name: Release Workflow
+name: Publish Dev Package
 
 on:
   release:
@@ -6,21 +6,22 @@ on:
       - published
 
 env:
-  OUTPUT_FILENAME: package_Algobot_index.json
+  DEV_BRANCH: dev-package-index
+  OUTPUT_FILENAME: package_Algobot_dev_index.json
   TEMPLATE_FILENAME: .github/workflows/platform_template.json
   COMMIT_NAME: github-actions[bot]
   COMMIT_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
 
 jobs:
-  publish:
-    name: Build and publish Arduino package
-    if: ${{ github.event.release.target_commitish == 'master' }}
+  publish-dev:
+    name: Build and publish dev Arduino package
+    if: ${{ github.event.release.target_commitish != 'master' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
-    - name: Checkout release tag
+    - name: Checkout source tag
       uses: actions/checkout@v4
       with:
         ref: ${{ github.event.release.tag_name || github.ref_name }}
@@ -52,14 +53,38 @@ jobs:
         tag_name: ${{ github.event.release.tag_name }}
         files: source/${{ steps.build.outputs.ARCHIVE_NAME }}
 
-    - name: Checkout output branch
+    - name: Mark release as prerelease
+      uses: actions/github-script@v7
+      with:
+        script: |
+          await github.rest.repos.updateRelease({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            release_id: context.payload.release.id,
+            prerelease: true
+          })
+
+    - name: Checkout output repository
       uses: actions/checkout@v4
       with:
-        ref: ${{ github.event.repository.default_branch }}
+        fetch-depth: 0
         path: output
 
-    - name: Update package index
+    - name: Switch to dev package branch
+      working-directory: output
       run: |
+        git fetch origin
+        if git ls-remote --exit-code --heads origin "${DEV_BRANCH}" >/dev/null 2>&1; then
+          git checkout -B "${DEV_BRANCH}" "origin/${DEV_BRANCH}"
+        else
+          git checkout -B "${DEV_BRANCH}" "origin/${{ github.event.repository.default_branch }}"
+        fi
+
+    - name: Update dev package index and artifact
+      run: |
+        if [[ ! -f "output/${OUTPUT_FILENAME}" ]]; then
+          cp "source/${OUTPUT_FILENAME}" "output/${OUTPUT_FILENAME}"
+        fi
         DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/${{ steps.build.outputs.ARCHIVE_NAME }}"
         source/scripts/update-package-index.sh \
           "output/${OUTPUT_FILENAME}" \
@@ -67,12 +92,12 @@ jobs:
           "source/${{ steps.build.outputs.ARCHIVE_NAME }}" \
           "$DOWNLOAD_URL"
 
-    - name: Commit updated package index
+    - name: Commit and push dev package index
       working-directory: output
       run: |
         git config user.name "${COMMIT_NAME}"
         git config user.email "${COMMIT_EMAIL}"
         git add "${OUTPUT_FILENAME}"
         git diff --cached --quiet && exit 0
-        git commit -m "Add ${{ github.event.release.tag_name }} release"
-        git push origin "${{ github.event.repository.default_branch }}"
+        git commit -m "Add dev package ${{ steps.version.outputs.VERSION }}"
+        git push origin "${DEV_BRANCH}"
