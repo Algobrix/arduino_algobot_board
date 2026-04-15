@@ -43,7 +43,7 @@ jobs:
       working-directory: source
       run: |
         chmod +x scripts/build-package.sh scripts/update-package-index.sh
-        BUILD_OUTPUT="$(VERSION_OVERRIDE='${{ steps.version.outputs.VERSION }}' scripts/build-package.sh)"
+        BUILD_OUTPUT="$(VERSION_OVERRIDE='${{ steps.version.outputs.VERSION }}' PLATFORM_NAME_OVERRIDE='Tangible and GoAlgo (dev)' BOARD_NAME_OVERRIDE='Tangible and GoAlgo Firmware (dev)' scripts/build-package.sh)"
         echo "$BUILD_OUTPUT"
         echo "$BUILD_OUTPUT" >> "$GITHUB_OUTPUT"
 

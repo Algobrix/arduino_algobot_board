@@ -21,6 +21,8 @@ if [[ ! -f "$SOURCE_DIR/platform.txt" ]]; then
 fi
 
 VERSION="${VERSION_OVERRIDE:-}"
+PLATFORM_NAME_OVERRIDE="${PLATFORM_NAME_OVERRIDE:-}"
+BOARD_NAME_OVERRIDE="${BOARD_NAME_OVERRIDE:-}"
 
 if [[ -z "$VERSION" ]]; then
   VERSION="$(grep '^version=' "$SOURCE_DIR/platform.txt" | head -n 1 | cut -d '=' -f 2-)"
@@ -58,6 +60,25 @@ if grep -q '^version=' "$PACKAGE_DIR/platform.txt"; then
 else
   echo "version entry not found in $PACKAGE_DIR/platform.txt" >&2
   exit 1
+fi
+
+if [[ -n "$PLATFORM_NAME_OVERRIDE" ]]; then
+  if grep -q '^name=' "$PACKAGE_DIR/platform.txt"; then
+    sed -i "s/^name=.*/name=$PLATFORM_NAME_OVERRIDE/" "$PACKAGE_DIR/platform.txt"
+  else
+    echo "name entry not found in $PACKAGE_DIR/platform.txt" >&2
+    exit 1
+  fi
+fi
+
+BOARDS_FILE="$PACKAGE_DIR/boards.txt"
+if [[ -n "$BOARD_NAME_OVERRIDE" && -f "$BOARDS_FILE" ]]; then
+  if grep -q '^algobotpb\.name=' "$BOARDS_FILE"; then
+    sed -i "s/^algobotpb\.name=.*/algobotpb.name=$BOARD_NAME_OVERRIDE/" "$BOARDS_FILE"
+  else
+    echo "algobotpb.name entry not found in $BOARDS_FILE" >&2
+    exit 1
+  fi
 fi
 
 FWVER_FILE="$PACKAGE_DIR/libraries/Tangible_and_GoAlgo/examples/Tangible_and_GoAlgo_Firmware/fwver.h"
