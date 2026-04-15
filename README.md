@@ -169,6 +169,7 @@ This channel is independent from stable releases and does not change `package_Al
    - pushes updated dev index to branch `dev-package-index`
 
 Team members can add the dev URL above to Additional Boards Manager URLs to install the latest shared dev build.
+It appears as a separate Boards Manager entry (`AlgoBrix Dev` / `Tangible and GoAlgo (dev)`).
 
 ## Stable vs Dev Release Rules
 
