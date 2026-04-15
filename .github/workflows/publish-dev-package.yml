@@ -43,7 +43,7 @@ jobs:
       working-directory: source
       run: |
         chmod +x scripts/build-package.sh scripts/update-package-index.sh
-        BUILD_OUTPUT="$(VERSION_OVERRIDE='${{ steps.version.outputs.VERSION }}' PLATFORM_NAME_OVERRIDE='Tangible and GoAlgo (dev)' BOARD_NAME_OVERRIDE='Tangible and GoAlgo Firmware (dev)' scripts/build-package.sh)"
+        BUILD_OUTPUT="$(VERSION_OVERRIDE='${{ steps.version.outputs.VERSION }}' PLATFORM_NAME_OVERRIDE='Tangible and GoAlgo (dev)' BOARD_KEY_OVERRIDE='algobotpbdev' BOARD_NAME_OVERRIDE='Tangible and GoAlgo Firmware (dev)' scripts/build-package.sh)"
         echo "$BUILD_OUTPUT"
         echo "$BUILD_OUTPUT" >> "$GITHUB_OUTPUT"
 
@@ -85,10 +85,20 @@ jobs:
         if [[ ! -f "output/${OUTPUT_FILENAME}" ]]; then
           cp "source/${OUTPUT_FILENAME}" "output/${OUTPUT_FILENAME}"
         fi
+        TEMPLATE_PATH="source/${TEMPLATE_FILENAME}"
+        if [[ ! -f "$TEMPLATE_PATH" ]]; then
+          BASE_TEMPLATE="source/.github/workflows/platform_template.json"
+          if [[ ! -f "$BASE_TEMPLATE" ]]; then
+            echo "Template file not found: $TEMPLATE_PATH or $BASE_TEMPLATE" >&2
+            exit 1
+          fi
+          TEMPLATE_PATH="$(mktemp)"
+          jq '.name = "Tangible and GoAlgo (dev)"' "$BASE_TEMPLATE" > "$TEMPLATE_PATH"
+        fi
         DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/${{ steps.build.outputs.ARCHIVE_NAME }}"
         source/scripts/update-package-index.sh \
           "output/${OUTPUT_FILENAME}" \
-          "source/${TEMPLATE_FILENAME}" \
+          "$TEMPLATE_PATH" \
           "source/${{ steps.build.outputs.ARCHIVE_NAME }}" \
           "$DOWNLOAD_URL"
 

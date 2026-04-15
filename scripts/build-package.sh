@@ -23,6 +23,7 @@ fi
 VERSION="${VERSION_OVERRIDE:-}"
 PLATFORM_NAME_OVERRIDE="${PLATFORM_NAME_OVERRIDE:-}"
 BOARD_NAME_OVERRIDE="${BOARD_NAME_OVERRIDE:-}"
+BOARD_KEY_OVERRIDE="${BOARD_KEY_OVERRIDE:-}"
 
 if [[ -z "$VERSION" ]]; then
   VERSION="$(grep '^version=' "$SOURCE_DIR/platform.txt" | head -n 1 | cut -d '=' -f 2-)"
@@ -72,12 +73,25 @@ if [[ -n "$PLATFORM_NAME_OVERRIDE" ]]; then
 fi
 
 BOARDS_FILE="$PACKAGE_DIR/boards.txt"
-if [[ -n "$BOARD_NAME_OVERRIDE" && -f "$BOARDS_FILE" ]]; then
-  if grep -q '^algobotpb\.name=' "$BOARDS_FILE"; then
-    sed -i "s/^algobotpb\.name=.*/algobotpb.name=$BOARD_NAME_OVERRIDE/" "$BOARDS_FILE"
-  else
-    echo "algobotpb.name entry not found in $BOARDS_FILE" >&2
-    exit 1
+if [[ -f "$BOARDS_FILE" ]]; then
+  BOARD_KEY="algobotpb"
+  if [[ -n "$BOARD_KEY_OVERRIDE" && "$BOARD_KEY_OVERRIDE" != "algobotpb" ]]; then
+    if grep -q '^algobotpb\.' "$BOARDS_FILE"; then
+      sed -i "s/^algobotpb\./${BOARD_KEY_OVERRIDE}./" "$BOARDS_FILE"
+      BOARD_KEY="$BOARD_KEY_OVERRIDE"
+    else
+      echo "algobotpb.* entries not found in $BOARDS_FILE" >&2
+      exit 1
+    fi
+  fi
+
+  if [[ -n "$BOARD_NAME_OVERRIDE" ]]; then
+    if grep -q "^${BOARD_KEY}\.name=" "$BOARDS_FILE"; then
+      sed -i "s/^${BOARD_KEY}\.name=.*/${BOARD_KEY}.name=$BOARD_NAME_OVERRIDE/" "$BOARDS_FILE"
+    else
+      echo "${BOARD_KEY}.name entry not found in $BOARDS_FILE" >&2
+      exit 1
+    fi
   fi
 fi
 
