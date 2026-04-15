@@ -10,7 +10,7 @@
       },
       "platforms": [
         {
-          "name": "Tangible and GoAlgo",
+          "name": "Tangible and GoAlgo (dev)",
           "architecture": "avr",
           "version": "0.3.25",
           "category": "contributed",
