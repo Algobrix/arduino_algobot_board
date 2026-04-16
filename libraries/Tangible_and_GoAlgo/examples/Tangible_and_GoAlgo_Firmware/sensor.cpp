@@ -1,19 +1,21 @@
 /* Includes **************************************************************** */
 #include "sensor.h"
-#include <SoftwareSerial.h>
 #include "systim.h"
 #include "config.h"
 
 
-/* Private constants ******************************************************* */
-
+/* Private constants *******************************************************/
+/* Max 1-Wire frame: preamble(1)+cmd(1)+size(1)+payload(<=4)+crc(1); keep RX parse in sync. */
+#define SENSOR_MAX_FRAME_BYTES 12
 
 /* Private macros ********************************************************** */
 
 /* Private types *********************************************************** */
 
-/* Private variables ******************************************************* */
+/* Private variables *******************************************************/
 Sensor sensors[NUM_OF_SENSORS] = {Sensor(SENSOR_A_PIN), Sensor(SENSOR_B_PIN)};
+/* Shared I/O buffer: lowers stack peak; single-threaded loop, no overlap between cmd_tx and cmd_get_response in one call chain. */
+static uint8_t s_sensorFrameBuf[SENSOR_MAX_FRAME_BYTES];
 
 
 /* Private function prototypes ********************************************* */
@@ -38,10 +40,9 @@ uint8_t Sensor::getValue(uint8_t *sensor_type) {
         cmd_tx(0x30,NULL,0);
 #endif
         uint8_t cmd;
-        uint8_t payload[32];
+        uint8_t payload[4];
         uint8_t size;
         int8_t res = cmd_get_response(&cmd,payload,&size);
-        Serial.println("res");
         if(res == 0)
         {
             uint32_t raw_value = payload[0];
@@ -103,8 +104,6 @@ uint8_t Sensor::getValue(uint8_t *sensor_type) {
             }
             if(k < 20)
             {
-                Serial.print("Sound sensor new: ");
-                Serial.println(k);
                 value = 1;
             }
             else
@@ -131,59 +130,54 @@ uint8_t Sensor::getValue(uint8_t *sensor_type) {
 
 
 void Sensor::cmd_tx(uint8_t cmd, uint8_t *payload, uint8_t size) {
-    uint8_t data[32];
     uint8_t crc = 0;
     uint8_t k = 0;
 
     // Construct message
-    data[k++] = 0xA5;  // Preamble
+    s_sensorFrameBuf[k++] = 0xA5;  // Preamble
     crc += 0xA5;
-    data[k++] = cmd;
+    s_sensorFrameBuf[k++] = cmd;
     crc += cmd;
-    data[k++] = size;
+    s_sensorFrameBuf[k++] = size;
     crc += size;
 
     for (uint8_t p = 0; p < size; p++) {
-        data[k++] = payload[p];
+        s_sensorFrameBuf[k++] = payload[p];
         crc += payload[p];
     }
 
     crc = ~crc + 1;   // Calculate CRC
-    data[k++] = crc;
+    s_sensorFrameBuf[k++] = crc;
 
     // Transmit data array using SoftwareUART write method
-    serial.write(data, k);
+    serial.write(s_sensorFrameBuf, k);
 }
 
 int8_t Sensor::cmd_get_response(uint8_t *cmd, uint8_t *payload, uint8_t *size) 
 {
-    uint8_t buffer[32];          // Temporary buffer to store the response
     uint8_t crc = 0x00;
     uint8_t preamble, cmd_id, cmd_size, cmd_crc;
     uint8_t bytesReceived = 0;
     unsigned long initialTimeout = 100000;  // 100 ms for the first byte (in microseconds)
     unsigned long byteTimeout = 5000;       // 5 ms for subsequent bytes (in microseconds)
-    unsigned long startTime = micros();
 
     // Wait for the first byte with a 100 ms timeout
     if (serial.rx_byte(&preamble, initialTimeout) != 0) {
-        Serial.println("Error: Timeout on first byte.");
         return -1;  // Timeout on first byte
     }
 
     // Start accumulating bytes
-    buffer[bytesReceived++] = preamble;
+    s_sensorFrameBuf[bytesReceived++] = preamble;
 
     // Check for the correct preamble
     if (preamble != 0xA5) {
-        Serial.println("Error: Invalid preamble.");
         return -3;  // Invalid preamble
     }
     crc += preamble;
 
     // Receive the rest of the message, using a 5 ms timeout for each byte
-    while (bytesReceived < sizeof(buffer)) {
-        if (serial.rx_byte(&buffer[bytesReceived], byteTimeout) != 0) {
+    while (bytesReceived < SENSOR_MAX_FRAME_BYTES) {
+        if (serial.rx_byte(&s_sensorFrameBuf[bytesReceived], byteTimeout) != 0) {
             break;  // Timeout on subsequent byte (indicates end of packet)
         }
         bytesReceived++;
@@ -191,34 +185,35 @@ int8_t Sensor::cmd_get_response(uint8_t *cmd, uint8_t *payload, uint8_t *size)
 
     // Verify that we received at least enough bytes for preamble, cmd, size, and crc
     if (bytesReceived < 4) {
-        Serial.println("Error: Not enough data received.");
         return -1;  // Not enough data received
     }
 
     // Parse the received data
-    cmd_id = buffer[1];
-    cmd_size = buffer[2];
+    cmd_id = s_sensorFrameBuf[1];
+    cmd_size = s_sensorFrameBuf[2];
     *cmd = cmd_id;
     *size = cmd_size;
     crc += cmd_id + cmd_size;
 
     // Check if the entire payload is present
     if (bytesReceived < (3 + cmd_size + 1)) {
-        Serial.println("Error: Incomplete payload.");
         return -1;  // Not enough data for payload and CRC
+    }
+
+    if (cmd_size > 4) {
+        return -1;  // Caller only supports 4-byte payload buffer
     }
 
     // Extract the payload and calculate CRC
     for (uint8_t i = 0; i < cmd_size; i++) {
-        payload[i] = buffer[3 + i];
+        payload[i] = s_sensorFrameBuf[3 + i];
         crc += payload[i];
     }
 
     // Validate CRC
-    cmd_crc = buffer[3 + cmd_size];
+    cmd_crc = s_sensorFrameBuf[3 + cmd_size];
     crc = (~crc) + 1;
     if (crc != cmd_crc) {
-        Serial.println("Error: CRC mismatch.");
         return -2;  // CRC error
     }
 

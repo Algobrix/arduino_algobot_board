@@ -10,7 +10,7 @@
 #define debugTHREAD                                    printDEBUG                      
 /* #define debugTHREAD */                                                          
 
-#define NUM_OF_THREADS 24
+#define NUM_OF_THREADS 20
 
 
 /* Exported macros ********************************************************* */

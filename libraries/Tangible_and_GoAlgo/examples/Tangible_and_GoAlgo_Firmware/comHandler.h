@@ -7,6 +7,7 @@
 #include <Crc16.h>
 #include "pinout.h"
 #include "scriptRow.h"
+#include "thread.h"
 #include "debug.h"
 
 /* Exported constants ****************************************************** */
@@ -64,7 +65,7 @@ enum COMHANDLER_STATE
     COMHANDLER_STATE_WAIT,
 };
 
-#define TRANSMIT_SERIAL_BUFFER_SIZE             62  // NUM_OF_THREADS*2 + 2
+#define TRANSMIT_SERIAL_BUFFER_SIZE ((NUM_OF_THREADS) * 2 + 2)
 /* Exported macros ********************************************************* */
 
 /* Exported types ********************************************************** */
