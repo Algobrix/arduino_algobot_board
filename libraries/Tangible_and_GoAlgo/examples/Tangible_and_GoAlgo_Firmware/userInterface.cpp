@@ -132,11 +132,15 @@ PowerManger::PowerManger(uint8_t powerLedPin ,uint8_t powerMeterPin) {
     int value = vin * 100; // Turn to int from float
     if ((int)vin == 0) 
     {
-        debugUI(F("USB Power Source. Battery voltage: " + (String)vin + "V\r\n"));
+        debugUI(F("USB Power Source. Battery voltage: "));
+        debugUI(vin);
+        debugUI(F("V\r\n"));
     } 
     else 
     {
-        debugUI(F("Battery voltage: " + (String)vin + "V\r\n"));
+        debugUI(F("Battery voltage: "));
+        debugUI(vin);
+        debugUI(F("V\r\n"));
     }
     return value;
   }

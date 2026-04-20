@@ -27,7 +27,6 @@ class SoundPlayer {
         void play(byte trackId, byte scriptRowId, boolean untillStop=false);
         void stop();
         void setVolume(int volumeLevel);
-        String getTrackCommand(byte trackNumber);
         boolean isPlaying();
 };
 
